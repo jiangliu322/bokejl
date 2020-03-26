@@ -1,22 +1,33 @@
 import React, { Component } from 'react'
 import { NavBar, Icon, List } from 'antd-mobile';
+import classNames from 'classnames/bind';
+import { FormOutlined } from '@ant-design/icons';
+import './navbastyler.css'
+import headimg from '../../assets/img/微信图片_20200320100359.jpg'
 export default class navbar extends Component {
   state = {
-    docked: {'width': 0, 'display': 'none'},
-    linumber: [1,2,3,4,5,6,7,8,9,0]
+    docked: false,
+    linumber: [1,2,3,4,5,6,7,8,9,0],
+    isshowdiv: false,
+    navList: [
+      {url: '', title: '1', imgPath: ''},
+      {url: '', title: '2', imgPath: ''},
+      {url: '', title: '3', imgPath: ''}
+    ],
+    qianming: '业精于勤荒于嬉,行成于思毁于随！',
+    showqianming: true
+
   }
   leftbtn = () => {
-    if(this.state.docked.width === '60%'){
-      this.setState({
-        docked: {'width': 0, 'display': 'none'},
-      });
-    }else{
-      this.setState({
-        docked: {'width': '60%', 'display': 'block'},
-      });
-    }
-    
-    console.log(this.state.docked)
+    this.setState({
+      docked: !this.state.docked,
+      isshowdiv: true
+    });
+  }
+  changeqianming = () => {
+    this.setState({
+      showqianming: !this.state.showqianming
+    })
   }
   render() {
     return (
@@ -33,27 +44,21 @@ export default class navbar extends Component {
           mode="dark"
           icon={<Icon type="ellipsis" />}
           onLeftClick={() => this.leftbtn()}
-        >导航栏</NavBar>
-        <ul 
-        className={this.state.docked}
-        style={{
-          'listStyle': 'none',
-          'margin': 0, 
-          'padding': 0,
-          'backgroundColor': 'skyblue',
-          'position': 'fixed',
-          'top': 0,
-          'left': 0,
-          'height': '100%',
-          'paddingTop': '50px',
-          'zIndex': 1
-        }}>
-          {
-            this.state.linumber.map(item => {
-            return <li style={{'lineHeight': '40px','textAlign': 'left'}} key={item}>{item}</li>
-            })
-          }
-        </ul>
+        >首页</NavBar>
+        <div className={classNames('porvpage', {'showporvpage': this.state.docked == true}, {'notshowporvpage': this.state.docked == false && this.state.isshowdiv})}>
+          <div className="header">
+            <img src={headimg} alt="头像"/>
+            <span className='nameSpan'>江流</span>
+            <p className={classNames({'showqianming' : !this.state.showqianming})}>{this.state.qianming} <FormOutlined onClick={() => this.changeqianming()} /></p>
+            <input className={classNames({'showqianming' : this.state.showqianming})} type="text"/>
+          </div>
+          <span className='daohang'>导航</span>
+          <ul className='daohangliebiao'>
+            {this.state.navList.map(item => {
+              return <li key={item.title}>{item.title}</li>
+            })}
+          </ul>
+        </div>
       </div>
       
     )
